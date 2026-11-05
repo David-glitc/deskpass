@@ -26,7 +26,7 @@ Maximum burn if sold out: 1,000 + 2,000 + 4,000 = **7,000 BOT**.
 
 ## Run it
 ```bash
-forge test                       # 15 unit tests + 1 fuzz test (the fork test no-ops without FOUNDRY_FORK)
+forge test                       # 14 unit tests + 1 fuzz test + 1 fork test (the fork test no-ops without FOUNDRY_FORK)
 FOUNDRY_FORK=true forge test --match-test fork   # real BOT Chain mainnet fork: real burn address, WBOT funding
 npm install && forge build
 npm run test:web                 # anvil fork + deploy + site build + headless Chromium: connect, mint, fund, claim
