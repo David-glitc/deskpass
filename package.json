@@ -1,0 +1,1 @@
+{"name":"deskpass","private":true,"type":"module","scripts":{"build":"node web/build.mjs","test:web":"node web/check.mjs"},"dependencies":{"viem":"2.55.19"},"devDependencies":{"@playwright/test":"^1.56.1","esbuild":"0.28.2"}}

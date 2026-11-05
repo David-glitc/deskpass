@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Instrument+Sans:wght@400;500;600;700&family=Azeret+Mono:wght@500;700&display=swap');
+/* Deskpass: a night trading floor; brass passes on navy. */
+:root{--scheme:dark;--bg:#0A0E16;--surface:#111826;--surface-2:#1A2335;--input-bg:#070A10;--tile:#1A2335;
+ --ink:#F4F0E4;--ink-2:#AEB8C9;--line:#222D42;--line-strong:#5A6C8C;
+ --accent:#D9B64A;--accent-hover:#E8CB75;--accent-ink:#1A1400;--accent-text:#E8CB75;--link:#9FD0FF;--focus:#9FD0FF;
+ --danger:#FF5A6E;--danger-bg:#2A0E13;--danger-text:#FF9AA6;--scrim:rgba(8,4,3,.8);
+ --radius-sm:4px;--radius-md:8px;--radius-lg:12px;--radius-btn:6px;--radius-pill:999px;--border-w:1px;
+ --shadow-1:0 18px 40px rgba(0,0,0,.5);--shadow-2:0 30px 70px rgba(0,0,0,.65);--shadow-btn:0 0 0 rgba(0,0,0,0);
+ --font-display:'Big Shoulders Display',Impact,sans-serif;--font-body:'Instrument Sans',system-ui,sans-serif;--font-label:'Instrument Sans',system-ui,sans-serif;--font-mono:'Azeret Mono',ui-monospace,monospace;
+ --display-weight:900;--display-tracking:0.005em;--display-case:uppercase;--label-tracking:.16em;
+ --hero-bg:radial-gradient(55% 60% at 72% 70%,rgba(255,107,44,.34),transparent 70%),radial-gradient(40% 40% at 76% 40%,rgba(255,194,75,.18),transparent 70%),radial-gradient(60% 50% at 10% 10%,rgba(122,40,20,.35),transparent 70%),var(--bg);
+ --hero-pattern:radial-gradient(circle at 50% 50%,rgba(255,140,87,.55) 0 1.2px,transparent 1.6px),radial-gradient(circle at 20% 80%,rgba(255,194,75,.35) 0 1px,transparent 1.4px);--hero-pattern-size:38px 46px,67px 59px;--hero-pattern-opacity:.6;
+ --chip-bg:rgba(23,17,15,.9);--live:#D9B64A;--live-ring:rgba(255,107,44,.3);--art-glow:radial-gradient(circle,rgba(255,107,44,.65),rgba(255,194,75,.25) 50%,transparent 72%);--ticker-bg:#140E0C}
+/* Signature: furnace-grate steps with a molten top edge, heat-bar features, a stamped steel CTA. */
+h1{line-height:.9;max-width:11ch}
+.steps li{position:relative;border-top:4px solid var(--accent);background:linear-gradient(180deg,rgba(255,107,44,.10),transparent 38%),var(--surface);box-shadow:0 -10px 28px -14px rgba(255,107,44,.7),var(--shadow-1)}
+.steps li:before{font-family:var(--font-display);font-size:2.4rem;line-height:1;color:var(--link)}
+.steps li:after{content:'';position:absolute;left:26px;right:26px;bottom:14px;height:6px;background:repeating-linear-gradient(90deg,var(--line-strong) 0 10px,transparent 10px 16px);opacity:.5}
+.features div{border-left:0;padding:16px 18px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-md);background-image:linear-gradient(90deg,var(--accent),var(--link));background-size:4px 100%;background-repeat:no-repeat}
+.cta-band{background:repeating-linear-gradient(-45deg,rgba(255,107,44,.07) 0 14px,transparent 14px 28px),var(--surface);border:2px solid var(--line-strong)}
+.ticker span:after{width:8px;height:8px;border-radius:2px;transform:rotate(45deg);background:var(--link)}
+button.primary,a.button.primary{text-transform:uppercase;letter-spacing:.06em;font-weight:700;box-shadow:0 0 0 1px rgba(255,194,75,.25),0 8px 24px -8px rgba(255,107,44,.75)}
+
+/* App: the furnace floor. */
+.kiln-head h2{margin:8px 0 6px}
+.kiln-head p{margin:0 0 4px}
+.pick{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.ceiling{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end}
+.ceiling button{min-height:44px}
+.route-card{margin-top:14px;padding:12px 14px;border:1px dashed var(--line-strong);border-radius:var(--radius-md);background:var(--input-bg)}
+.route-card .sub{margin:0 0 4px}
+.route-card p{margin:4px 0 0}
+.route{font-family:var(--font-mono);font-size:.82rem;color:var(--ink);overflow-wrap:anywhere}
+.route .hop{display:inline-block;padding:1px 6px;border-radius:var(--radius-sm);background:var(--surface-2);color:var(--link)}
+.furnaces{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:20px}
+.furnace{display:flex;flex-direction:column;gap:14px;padding:18px;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--radius-lg);scroll-margin-top:24px}
+.furnace:target{border-color:var(--link);box-shadow:0 0 0 2px var(--link)}
+.furnace-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.furnace-head h3{margin:4px 0 2px;font-size:1.5rem;overflow-wrap:anywhere}
+.heat-badge{border-color:var(--line-strong)}
+.furnace[data-heat="2"] .heat-badge,.furnace[data-heat="3"] .heat-badge{border-color:var(--accent);color:var(--accent-text)}
+.firebox{position:relative;isolation:isolate;display:grid;grid-template-columns:96px minmax(0,1fr);align-items:center;gap:14px;padding:16px;border-radius:var(--radius-md);background:radial-gradient(70% 90% at 20% 100%,rgba(255,107,44,.28),transparent 70%),#0A0605;border:1px solid var(--line);overflow:hidden}
+.grate{position:absolute;left:0;right:0;bottom:0;height:10px;background:repeating-linear-gradient(90deg,#3A2A24 0 8px,transparent 8px 12px);opacity:.9}
+.flame{width:96px;height:112px;filter:drop-shadow(0 0 12px rgba(255,107,44,.55))}
+.flame .f1{fill:#D9B64A}.flame .f2{fill:#FFA23A}.flame .f3{fill:#FFE27A}
+.flame path{transform-origin:50% 100%;animation:lick 1.6s ease-in-out infinite alternate}
+.flame .f2{animation-duration:1.1s}.flame .f3{animation-duration:.8s}
+@keyframes lick{0%{transform:scale(1,1) skewX(0)}50%{transform:scale(.96,1.05) skewX(-3deg)}100%{transform:scale(1.03,.96) skewX(3deg)}}
+.furnace[data-heat="0"] .flame{filter:none;opacity:.25}.furnace[data-heat="0"] .flame path{animation:none}
+.furnace[data-heat="1"] .flame{transform:scale(.72);transform-origin:50% 100%}
+.furnace[data-heat="3"] .flame{transform:scale(1.12);transform-origin:50% 100%;filter:drop-shadow(0 0 20px rgba(255,140,60,.8))}
+.burned .sub{margin:0 0 6px;color:var(--link)}
+.odo{display:flex;flex-wrap:wrap;gap:3px}
+.odo b{display:inline-grid;place-items:center;min-width:1.15em;padding:4px 3px;border-radius:3px;background:linear-gradient(#24170f,#120a07);border:1px solid #3A2A24;font-family:var(--font-mono);font-size:clamp(1rem,2.6vw,1.35rem);color:#FFE27A;box-shadow:inset 0 -6px 10px rgba(0,0,0,.5)}
+.odo b.sep{min-width:0;padding:4px 1px;background:none;border-color:transparent;box-shadow:none;color:var(--ink-2)}
+.burned .tiny{display:block;margin-top:6px}
+.gauges{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px;margin:0}
+.gauges dt{font-family:var(--font-label);font-size:.66rem;font-weight:700;letter-spacing:var(--label-tracking);text-transform:uppercase;color:var(--ink-2)}
+.gauges dd{margin:3px 0 0;font-family:var(--font-mono);font-size:.82rem;color:var(--ink);overflow-wrap:anywhere}
+.gauges .meter{height:6px;margin:8px 0 0}
+.gauges .meter i{background:linear-gradient(90deg,var(--accent),var(--link))}
+.meter.ceil i{background:var(--line-strong)}.meter.ceil.over i{background:var(--danger)}
+.stoke button{width:100%;min-height:52px;font-size:1rem}
+.stoke button[aria-disabled=true]{opacity:.55;box-shadow:none}
+.stoke .tiny{margin:8px 0 0;text-align:center}
+.fuel-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}
+.fuel-row .chips{margin:0;flex-wrap:nowrap}
+.furnace form button[type=submit]{margin-top:10px}
+.furnace details{padding:12px 0 0}
+.empty.cold{border:1px dashed var(--line-strong);border-radius:var(--radius-lg)}
+@media(max-width:480px){.firebox{grid-template-columns:72px minmax(0,1fr)}.flame{width:72px;height:84px}.gauges{grid-template-columns:1fr}}

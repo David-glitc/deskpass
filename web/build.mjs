@@ -1,0 +1,32 @@
+// Builds dist/ for Deskpass: one bundled app, the wave static-site shell, config from env or the deployment journal.
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {build} from 'esbuild';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),web=path.join(root,'web'),dist=path.join(root,'dist');
+const rpc=process.env.BOT_RPC_URL||'https://rpc.botchain.ai',local=/^http:\/\/(127\.0\.0\.1|localhost):/.test(rpc);
+const net=local?{key:'local',id:Number(process.env.BOT_CHAIN_ID||677),name:'BOT Chain (local fork)',label:'Local fork of BOT Chain',rpc,explorer:'https://scan.botchain.ai',explorerName:'BOTScan',faucet:null}
+ :{key:'mainnet',id:677,name:'BOT Chain',label:'BOT Chain Mainnet',rpc,explorer:'https://scan.botchain.ai',explorerName:'BOTScan',faucet:null};
+const journalFile=process.env.DESKPASS_JOURNAL||path.join(root,'deployments',`${net.key}.json`);
+const journal=fs.existsSync(journalFile)?JSON.parse(fs.readFileSync(journalFile,'utf8')):{contracts:{},ready:false};
+const abi=JSON.parse(fs.readFileSync(path.join(root,'out/Deskpass.sol/Deskpass.json'),'utf8')).abi;
+const infrastructure={WBOT:'0xD5452816194a3784dBa983426cCe7c122F4abd30',USDT:'0x0000000000000000000000000000000000000000',quoter:'0x0000000000000000000000000000000000000000'};
+const config={slug:'deskpass',name:'Deskpass',contract:'Deskpass',tokens:[{address:infrastructure.WBOT,symbol:'WBOT',name:'Wrapped BOT',decimals:18}],assetLinks:{},net,chainId:net.id,rpc,contracts:journal.contracts,infrastructure,ready:!!journal.ready,local};
+fs.rmSync(dist,{recursive:true,force:true});fs.mkdirSync(path.join(dist,'app'),{recursive:true});
+await build({stdin:{contents:`import './products/deskpass.js';`,resolveDir:web,sourcefile:'entry.js'},outfile:path.join(dist,'app.js'),bundle:true,minify:true,format:'esm',target:'es2022',define:{APP:JSON.stringify(config),ABIS:JSON.stringify({Deskpass:abi})},logLevel:'error'});
+const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const addr=journal.contracts.Deskpass;
+const contracts=`<div class="contract"><strong>Deskpass</strong>${addr?`<a href="${net.explorer}/address/${addr}" target="_blank" rel="noopener noreferrer">${addr}</a>`:'<span class="pending">Address appears here at launch</span>'}</div>`;
+const logo=fs.readFileSync(path.join(web,'theme/logo.svg'),'utf8').trim();
+const vars={THEME_COLOR:'#0A0E16',NAME:'Deskpass',DESCRIPTION:'3,000 passes that share every fee sent to the Deskpass pot. Minting burns BOT.',LOGO:logo,BOTCHAIN_LOGO:'botchain.svg',EYEBROW:'Fee-sharing pass',NETWORK_UPPER:net.label.toUpperCase(),NETWORK:esc(net.label),CHAIN_ID:net.id,FAUCET:'',FOOTER:'',APP_TITLE:'Mint a pass. Earn from the desk pot.',APP_LINE:'Every BOT or token sent to Deskpass is split equally among passes minted before it.',APP_LAYOUT:'split',CONTRACTS:contracts,ASSETS:''};
+let html=fs.readFileSync(path.join(web,'app.html'),'utf8');
+for(const [k,v] of Object.entries(vars))html=html.replaceAll(`__${k}__`,v);
+const left=html.match(/__[A-Z_]+__/g);if(left)throw Error(`Unfilled placeholders: ${[...new Set(left)]}`);
+fs.writeFileSync(path.join(dist,'app/index.html'),html);
+fs.writeFileSync(path.join(dist,'index.html'),'<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=/app/"><title>Deskpass</title><a href="/app/">Open Deskpass</a>');
+const css=fs.readFileSync(path.join(web,'theme/theme.css'),'utf8');
+fs.writeFileSync(path.join(dist,'style.css'),fs.readFileSync(path.join(web,'base.css'),'utf8')+'\n'+css);
+fs.writeFileSync(path.join(dist,'icon.svg'),logo);
+for(const f of ['botchain.svg','botchain-dark.svg'])fs.copyFileSync(path.join(web,f),path.join(dist,f));
+fs.writeFileSync(path.join(dist,'deployment.json'),JSON.stringify({product:'Deskpass',chainId:net.id,network:net.key,ready:config.ready,contracts:journal.contracts},null,1));
+console.log(`Deskpass: built for ${net.label} (${config.ready?'contracts configured':'awaiting deployment'})`);
